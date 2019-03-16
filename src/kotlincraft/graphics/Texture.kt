@@ -1,12 +1,15 @@
 package kotlincraft.graphics
 
 import kotlincraft.math.Vector
+import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL15.*
-import org.lwjgl.stb.STBImage.*
+import org.lwjgl.stb.STBImage.stbi_load
+import org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load
 import org.lwjgl.system.MemoryStack
+import java.awt.image.BufferedImage
 import java.nio.ByteBuffer
 
-class Texture(path: String, nearestFilter: Boolean = false) {
+class Texture {
 
     private val textureId: Int = glGenTextures()
 
@@ -14,8 +17,12 @@ class Texture(path: String, nearestFilter: Boolean = false) {
     var height: Int = 0; private set
     var aspectRatio: Double = 0.0; private set
 
-    init {
+    constructor(path: String, nearestFilter: Boolean = false) {
         loadTexture(path, nearestFilter)
+    }
+
+    constructor(image: BufferedImage, nearestFilter: Boolean = false) {
+        loadTexture(image, nearestFilter)
     }
 
     fun render(position: Vector, size: Vector, color: Color = Color.white) {
@@ -67,6 +74,30 @@ class Texture(path: String, nearestFilter: Boolean = false) {
         width = w.get()
         height = h.get()
         aspectRatio = width.toDouble() / height
+
+        bind()
+        setParameters(nearestFilter)
+        uploadData(GL_RGBA8, width, height, GL_RGBA, buffer)
+    }
+
+    private fun loadTexture(image: BufferedImage, nearestFilter: Boolean) {
+        width = image.width
+        height = image.height
+        aspectRatio = width.toDouble() / height
+        val pixels = image.getRGB(0, 0, image.width, image.height, null, 0, image.width)
+
+        val buffer = BufferUtils.createByteBuffer(width * height * 4) // 4 = RGBA
+        for (y in height - 1 downTo 0) {
+            for (x in 0 until width) {
+                val pixel = pixels[x + y * width]
+                buffer.put((pixel shr 16 and 0xFF).toByte()) // Red
+                buffer.put((pixel shr 8 and 0xFF).toByte()) // Green
+                buffer.put((pixel and 0xFF).toByte()) // Blue
+                buffer.put((pixel shr 24 and 0xFF).toByte()) // Alpha
+            }
+        }
+
+        buffer.flip()
 
         bind()
         setParameters(nearestFilter)
