@@ -1,12 +1,13 @@
 package kotlincraft.world.entity
 
+import kotlincraft.GameObject
 import kotlincraft.Resources
 import kotlincraft.graphics.Texture
 import kotlincraft.input.Input
 import kotlincraft.math.Vector
 import org.lwjgl.glfw.GLFW
 
-class Entity(val name: String, textureName: String, var position: Vector, val size: Vector) {
+class Entity(val name: String, textureName: String, position: Vector, size: Vector) : GameObject(position, size) {
 
     private val texture: Texture? = Resources.getTexture("entity_$textureName")
 
