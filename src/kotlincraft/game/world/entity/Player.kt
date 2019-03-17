@@ -1,4 +1,4 @@
-package kotlincraft.world.entity
+package kotlincraft.game.world.entity
 
 import kotlincraft.input.Input
 import kotlincraft.math.Vector

@@ -12,8 +12,6 @@ class Camera(var window: Window, val viewportHeight: Double, var position: Vecto
         calculateViewportWidth()
     }
 
-    fun update() {}
-
     fun setProjection() {
         glLoadIdentity()
         glOrtho(-viewportWidth / 2, viewportWidth / 2, -viewportHeight / 2, viewportHeight / 2, 1.0, 0.0)

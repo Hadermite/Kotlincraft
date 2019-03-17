@@ -2,7 +2,8 @@ package kotlincraft
 
 import kotlincraft.input.Input
 import kotlincraft.math.Vector
-import kotlincraft.world.World
+import kotlincraft.game.world.World
+import kotlincraft.manager.SceneManager
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL15.*
@@ -13,6 +14,9 @@ class Window {
     var aspectRatio = 0.0; private set
     var fps = 0; private set
     var ups = 0; private set
+
+    val sceneManager = SceneManager()
+
     private var window: Long = 0
     private var fullscreen = false
     private var vSync = false
@@ -67,7 +71,6 @@ class Window {
     }
 
     fun start() {
-        val world = World(this)
         val updateInterval = 1.0 / Constants.tickRate
         var timeSinceLastUpdate = 0.0
         var lastTime = System.nanoTime()
@@ -87,11 +90,11 @@ class Window {
 
             if (timeSinceLastUpdate >= updateInterval) {
                 timeSinceLastUpdate -= updateInterval
-                world.update(updateInterval)
+                sceneManager.update(updateInterval)
                 upsTimer.add()
             }
 
-            world.render()
+            sceneManager.render()
             fpsTimer.add()
 
             upsTimer.update(delta)

@@ -1,4 +1,4 @@
-package kotlincraft.world
+package kotlincraft.game.world
 
 import kotlincraft.Resources
 import kotlincraft.graphics.Texture

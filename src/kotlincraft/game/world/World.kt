@@ -1,11 +1,10 @@
-package kotlincraft.world
+package kotlincraft.game.world
 
 import kotlincraft.Camera
-import kotlincraft.Window
 import kotlincraft.math.Vector
-import kotlincraft.world.entity.Player
+import kotlincraft.game.world.entity.Player
 
-class World(window: Window) {
+class World(private val camera: Camera) {
 
     companion object {
         const val width: Int = 10000 / Chunk.size
@@ -13,7 +12,6 @@ class World(window: Window) {
     }
 
     private val chunks: Array<Array<Chunk?>>
-    private val camera: Camera = Camera(window, 10.0, Vector.zero)
 
     private val player = Player(Vector.zero, Vector(0.8, 1.75))
 
@@ -25,13 +23,9 @@ class World(window: Window) {
         player.update(delta)
 
         camera.position = player.position.add(Vector(player.size.x / 2, player.size.y / 2))
-
-        camera.update()
     }
 
     fun render() {
-        camera.setProjection()
-
         val xChunks = (camera.viewportWidth / Chunk.size).toInt() + 2
         for (y in -1..1) {
             for (x in -xChunks / 2..xChunks / 2) {
@@ -60,9 +54,5 @@ class World(window: Window) {
 
     private fun isChunkInRange(position: Vector): Boolean {
         return !(position.x < 0 || position.y < 0 || position.x >= width * Chunk.size || position.y >= height * Chunk.size)
-    }
-
-    fun dispose() {
-        camera.dispose()
     }
 }
