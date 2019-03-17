@@ -2,4 +2,7 @@ package kotlincraft
 
 import kotlincraft.math.Vector
 
-open class GameObject(var position: Vector, var size: Vector)
+abstract class GameObject(open var position: Vector, open var size: Vector) {
+
+    abstract fun render()
+}
