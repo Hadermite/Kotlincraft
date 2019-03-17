@@ -3,7 +3,7 @@ package kotlincraft.world
 import kotlincraft.Camera
 import kotlincraft.Window
 import kotlincraft.math.Vector
-import kotlincraft.world.entity.Entity
+import kotlincraft.world.entity.Player
 
 class World(window: Window) {
 
@@ -15,7 +15,7 @@ class World(window: Window) {
     private val chunks: Array<Array<Chunk?>>
     private val camera: Camera = Camera(window, 10.0, Vector.zero)
 
-    private val player = Entity("Player", "player", Vector.zero, Vector(0.8, 1.75))
+    private val player = Player(Vector.zero, Vector(0.8, 1.75))
 
     init {
         chunks = Array(height) { kotlin.arrayOfNulls<Chunk>(width) }
